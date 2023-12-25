@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int isPalindrome(char *str) {
+    int left = 0;
+    int right = strlen(str) - 1;
+
+    while (right > left) {
+        while (!isalnum(str[left])) // Skip non-alphanumeric characters from the left
+            left++;
+        while (!isalnum(str[right])) // Skip non-alphanumeric characters from the right
+            right--;
+
+        if (tolower(str[left]) != tolower(str[right])) // Compare characters ignoring case
+            return 0; // Not a palindrome
+
+        left++;
+        right--;
+    }
+    return 1; // Palindrome
+}
+
+int main() {
+    char input[100];
+    printf("Enter a string: ");
+    scanf("%99[^\n]", input); // Read input string
+
+    if (isPalindrome(input))
+        printf("The string is a palindrome.\n");
+    else
+        printf("The string is not a palindrome.\n");
+
+    return 0;
+}
