@@ -1,35 +1,40 @@
 #include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-
-int isPalindrome(char *str) {
-    int left = 0;
-    int right = strlen(str) - 1;
-
-    while (right > left) {
-        while (!isalnum(str[left])) // Skip non-alphanumeric characters from the left
-            left++;
-        while (!isalnum(str[right])) // Skip non-alphanumeric characters from the right
-            right--;
-
-        if (tolower(str[left]) != tolower(str[right])) // Compare characters ignoring case
-            return 0; // Not a palindrome
-
-        left++;
-        right--;
-    }
-    return 1; // Palindrome
-}
+#include <stdlib.h>
 
 int main() {
-    char input[100];
-    printf("Enter a string: ");
-    scanf("%99[^\n]", input); // Read input string
+    char sourceFileName[100], destinationFileName[100];
+    FILE *sourceFile, *destinationFile;
+    char ch;
 
-    if (isPalindrome(input))
-        printf("The string is a palindrome.\n");
-    else
-        printf("The string is not a palindrome.\n");
+    printf("Enter source file name: ");
+    scanf("%s", sourceFileName);
+
+    // Opening the source file
+    sourceFile = fopen(sourceFileName, "r");
+    if (sourceFile == NULL) {
+        printf("Error opening source file.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Enter destination file name: ");
+    scanf("%s", destinationFileName);
+
+    // Creating a copy of the source file
+    destinationFile = fopen(destinationFileName, "w");
+    if (destinationFile == NULL) {
+        fclose(sourceFile);
+        printf("Error creating destination file.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    while ((ch = fgetc(sourceFile)) != EOF) {
+        fputc(ch, destinationFile);
+    }
+
+    printf("File copied successfully.\n");
+
+    fclose(sourceFile);
+    fclose(destinationFile);
 
     return 0;
 }
